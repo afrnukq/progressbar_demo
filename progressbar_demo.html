@@ -2,41 +2,78 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <style type="text/css">
         #cntr {
             border: 1px solid;
             background-color: white;
             width: 500px;
             height: 20px;
+            margin-bottom: 10px;
         }
         
         #prog {
             width: 10%;
-            height: 20px;            
+            height: 20px;
             background-color: yellow;
+        }
+        
+        #percent {
+            float: right;
+            margin-right: 2px;
         }
     </style>
     <script type="text/javascript">
-        var percent = 10;
+        var onload = function() {
+            var percent = 10;
             var timer;
-           
-            timer = setInterval(function(){
-                console.log(percent);
-                if(percent.toFixed(1)<100){
-                    percent+=0.1;
-                    document.getElementById("prog").style.width=percent+"%";
-                }
-                else{
+            var speed = 0.05;
+
+            var updateProgress = function(s) {
+                percent += s;
+
+                if (percent.toFixed(2) < 100) {
+                    var p = percent.toFixed(1) + "%";
+
+                    document.getElementById("percent").innerText = p;
+                    document.getElementById("prog").style.width = p;
+                } else {
+                    var p = "100%";
+                    document.getElementById("percent").innerText = p;
+                    document.getElementById("prog").style.width = p;
                     clearInterval(timer);
                 }
-            },1);
+            };
+
+            timer = setInterval(function() {
+                updateProgress(speed);
+            }, 1);
+
+            document.getElementById("accelerate").onclick = function() {
+                clearInterval(timer);
+                speed = 0.1;
+                timer = setInterval(function() {
+                    updateProgress(speed);
+                }, 1);
+            };
+
+            document.getElementById("decelerate").onclick = function() {
+                clearInterval(timer);
+                speed = 0.05;
+                timer = setInterval(function() {
+                    updateProgress(speed);
+                }, 1);
+            };
+        };
     </script>
 </head>
 
-<body>
+<body onload="onload">
     <div id="cntr">
-        <div id="prog"></div>
+        <div id="prog"><span id="percent"></span></div>
     </div>
+    <input type="button" id="accelerate" value="加速" />
+    <input type="button" id="decelerate" value="减速" />
 </body>
 
 </html>
