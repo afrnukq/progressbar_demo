@@ -32,51 +32,10 @@
                     var p = (percent < 100 ? percent.toFixed(1) : "100") + "%";
                     document.getElementById("percent").innerText = p;
                     document.getElementById("prog").style.width = p;
-                },
-                speed: 0.05
+                }
             });
 
-            //FP.start();
-
-            // var percent = 10;
-            // var timer;
-            // var speed = 0.05;
-
-            // var updateProgress = function(s) {
-            //     percent += s;
-
-            //     if (percent.toFixed(2) < 100) {
-            //         var p = percent.toFixed(1) + "%";
-
-            //         document.getElementById("percent").innerText = p;
-            //         document.getElementById("prog").style.width = p;
-            //     } else {
-            //         var p = "100%";
-            //         document.getElementById("percent").innerText = p;
-            //         document.getElementById("prog").style.width = p;
-            //         clearInterval(timer);
-            //     }
-            // };
-
-            // timer = setInterval(function() {
-            //     updateProgress(speed);
-            // }, 1);
-
-            // document.getElementById("accelerate").onclick = function() {
-            //     clearInterval(timer);
-            //     speed = 0.1;
-            //     timer = setInterval(function() {
-            //         updateProgress(speed);
-            //     }, 1);
-            // };
-
-            // document.getElementById("decelerate").onclick = function() {
-            //     clearInterval(timer);
-            //     speed = 0.05;
-            //     timer = setInterval(function() {
-            //         updateProgress(speed);
-            //     }, 1);
-            // };
+            FP.start();
         };
     </script>
 </head>
@@ -85,8 +44,6 @@
     <div id="cntr">
         <div id="prog"><span id="percent"></span></div>
     </div>
-    <input type="button" id="accelerate" value="加速" />
-    <input type="button" id="decelerate" value="减速" />
 </body>
 
 </html>

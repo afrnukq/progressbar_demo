@@ -1,6 +1,6 @@
 var FP = (function() {
     var timer = null;
-    var speed = 0.01;
+    var speed = 0.05;
     var timeUnit = 1;
     var percent = 0.0;
 
@@ -8,12 +8,12 @@ var FP = (function() {
         var p = (percent + speed).toFixed(2);
 
         if (p < 100) {
-            percent = p;
-            onpercentChanged(percent);
+            percent = parseFloat(p);
+            onPercentChanged(percent);
 
         } else {
             percent = 100;
-            onpercentChanged(percent);
+            onPercentChanged(percent);
             stop();
         }
     };
@@ -45,14 +45,15 @@ var FP = (function() {
             }
         }
 
-        if (options.speed !== undefined && options.speed !== null) {
-            if (options.speed > 0) {
-                speed = options.speed;
-            } else {
-                throw "speed should be greater than 0";
-            }
-        }
+        // if (options.speed !== undefined && options.speed !== null) {
+        //     if (options.speed > 0) {
+        //         speed = options.speed;
+        //     } else {
+        //         throw "speed should be greater than 0";
+        //     }
+        // }
     };
+
 
     return {
         init: init,
