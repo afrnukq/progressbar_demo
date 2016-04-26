@@ -13,7 +13,7 @@
         }
         
         #prog {
-            width: 10%;
+            width: 0%;
             height: 20px;
             background-color: yellow;
         }
@@ -23,47 +23,60 @@
             margin-right: 2px;
         }
     </style>
+    <script type="text/javascript" src="fakeprogress.js"></script>
     <script type="text/javascript">
         var onload = function() {
-            var percent = 10;
-            var timer;
-            var speed = 0.05;
 
-            var updateProgress = function(s) {
-                percent += s;
-
-                if (percent.toFixed(2) < 100) {
-                    var p = percent.toFixed(1) + "%";
-
+            FP.init({
+                onPercentChanged: function(percent) {
+                    var p = (percent < 100 ? percent.toFixed(1) : "100") + "%";
                     document.getElementById("percent").innerText = p;
                     document.getElementById("prog").style.width = p;
-                } else {
-                    var p = "100%";
-                    document.getElementById("percent").innerText = p;
-                    document.getElementById("prog").style.width = p;
-                    clearInterval(timer);
-                }
-            };
+                },
+                speed: 0.05
+            });
 
-            timer = setInterval(function() {
-                updateProgress(speed);
-            }, 1);
+            //FP.start();
 
-            document.getElementById("accelerate").onclick = function() {
-                clearInterval(timer);
-                speed = 0.1;
-                timer = setInterval(function() {
-                    updateProgress(speed);
-                }, 1);
-            };
+            // var percent = 10;
+            // var timer;
+            // var speed = 0.05;
 
-            document.getElementById("decelerate").onclick = function() {
-                clearInterval(timer);
-                speed = 0.05;
-                timer = setInterval(function() {
-                    updateProgress(speed);
-                }, 1);
-            };
+            // var updateProgress = function(s) {
+            //     percent += s;
+
+            //     if (percent.toFixed(2) < 100) {
+            //         var p = percent.toFixed(1) + "%";
+
+            //         document.getElementById("percent").innerText = p;
+            //         document.getElementById("prog").style.width = p;
+            //     } else {
+            //         var p = "100%";
+            //         document.getElementById("percent").innerText = p;
+            //         document.getElementById("prog").style.width = p;
+            //         clearInterval(timer);
+            //     }
+            // };
+
+            // timer = setInterval(function() {
+            //     updateProgress(speed);
+            // }, 1);
+
+            // document.getElementById("accelerate").onclick = function() {
+            //     clearInterval(timer);
+            //     speed = 0.1;
+            //     timer = setInterval(function() {
+            //         updateProgress(speed);
+            //     }, 1);
+            // };
+
+            // document.getElementById("decelerate").onclick = function() {
+            //     clearInterval(timer);
+            //     speed = 0.05;
+            //     timer = setInterval(function() {
+            //         updateProgress(speed);
+            //     }, 1);
+            // };
         };
     </script>
 </head>

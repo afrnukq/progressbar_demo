@@ -5,41 +5,41 @@ var FP = (function() {
     var percent = 0.0;
 
     var updateProgress = function() {
-        var p = (this.percent + this.speed).toFixed(2);
+        var p = (percent + speed).toFixed(2);
 
         if (p < 100) {
-            this.percent = p;
-            this.onpercentChanged(this.percent);
+            percent = p;
+            onpercentChanged(percent);
 
         } else {
-            this.percent = 100;
-            this.onpercentChanged(this.percent);
-            this.stop();
+            percent = 100;
+            onpercentChanged(percent);
+            stop();
         }
     };
 
     var start = function() {
-        if (this.timer !== null) {
-            this.stop();
+        if (timer !== null) {
+            stop();
         }
 
-        this.timer = setInterval(this.updateProgress, this.timeUnit);
+        timer = setInterval(updateProgress, timeUnit);
     };
 
     var stop = function() {
-        clearInterval(this.timer);
-        this.timer = null;
-        this.percent = 0.0;
+        clearInterval(timer);
+        timer = null;
+        percent = 0.0;
     };
 
-    var onPercentChanged = function(percent) {
+    var onPercentChanged = function(p) {
 
     };
 
     var init = function(options) {
         if (options.onPercentChanged !== undefined && options.onPercentCahnged !== null) {
             if (typeof options.onPercentChanged == "function") {
-                this.onPercentChanged = options.onPercentChanged;
+                onPercentChanged = options.onPercentChanged;
             } else {
                 throw "onPercentCahnged is not a function";
             }
@@ -47,18 +47,16 @@ var FP = (function() {
 
         if (options.speed !== undefined && options.speed !== null) {
             if (options.speed > 0) {
-                this.speed = options.speed;
+                speed = options.speed;
             } else {
                 throw "speed should be greater than 0";
             }
         }
     };
 
-    var finishWithIn = function(ms) {
-
-    };
-
     return {
-
+        init: init,
+        start: start,
+        stop: stop
     };
-}());
+})();
