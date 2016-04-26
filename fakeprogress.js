@@ -1,63 +1,91 @@
 var FP = (function() {
-    var timer = null;
-    var speed = 0.05;
-    var timeUnit = 1;
-    var percent = 0.0;
+    var _config = {
+        default: {
+            speed: 0.05,
+            timeUnit: 1
+        }
+    };
 
-    var updateProgress = function() {
-        var p = (percent + speed).toFixed(2);
+    var _timer = null;
+    var _speed = _config.default.speed;
+    var _timeUnit = _config.default.timeUnit;
+    var _percent = 0.0;
+    var _isRunning = false;
+    var _stopPercent = 100.0;
 
-        if (p < 100) {
-            percent = parseFloat(p);
-            onPercentChanged(percent);
+    var _updateProgress = function() {
+        var p = parseFloat((_percent + _speed).toFixed(2));
+
+        if (p < _stopPercent) {
+            _percent = p;
+            _onPercentChanged(_percent);
 
         } else {
-            percent = 100;
-            onPercentChanged(percent);
-            stop();
+            _percent = _stopPercent;
+            _onPercentChanged(_percent);
+            _stop();
         }
     };
 
-    var start = function() {
-        if (timer !== null) {
-            stop();
+    var _start = function() {
+        if (_isRunning) {
+            _stop();
         }
 
-        timer = setInterval(updateProgress, timeUnit);
+        _isRunning = true;
+        _timer = setInterval(_updateProgress, _timeUnit);
     };
 
-    var stop = function() {
-        clearInterval(timer);
-        timer = null;
-        percent = 0.0;
+    var _stop = function() {
+        clearInterval(_timer);
+        _timer = null;
+        _isRunning = false;
     };
 
-    var onPercentChanged = function(p) {
+    var _reset = function() {
+        if (_isRunning) {
+            _stop();
+        }
+        _percent = 0.0;
+    };
+
+    var _onPercentChanged = function(changedPercent) {
 
     };
 
-    var init = function(options) {
+    var _init = function(options) {
         if (options.onPercentChanged !== undefined && options.onPercentCahnged !== null) {
             if (typeof options.onPercentChanged == "function") {
-                onPercentChanged = options.onPercentChanged;
+                _onPercentChanged = options.onPercentChanged;
             } else {
                 throw "onPercentCahnged is not a function";
             }
         }
-
-        // if (options.speed !== undefined && options.speed !== null) {
-        //     if (options.speed > 0) {
-        //         speed = options.speed;
-        //     } else {
-        //         throw "speed should be greater than 0";
-        //     }
-        // }
     };
 
+    var _stopAt = function(stopPercent, withInMs) {
+        if (stopPercent <= _percent) {
+            throw "stopPercent should be greater than current percent";
+        }
+
+        if (withInMs <= 0) {
+            throw "withInMs should be greater than 0";
+        }
+
+        if (_isRunning) {
+            _stop();
+        }
+
+        var leftPercent = stopPercent - _percent;
+        _speed = leftPercent / withInMs;
+        _stopPercent = stopPercent;
+        _start();
+    };
 
     return {
-        init: init,
-        start: start,
-        stop: stop
+        init: _init,
+        start: _start,
+        stop: _stop,
+        stopAt: _stopAt
     };
 })();
