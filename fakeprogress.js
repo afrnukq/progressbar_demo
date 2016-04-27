@@ -2,7 +2,7 @@ var FP = (function() {
     var _config = {
         default: {
             speed: 0.05,
-            timeUnit: 1
+            timeUnit: 10
         }
     };
 
@@ -28,10 +28,6 @@ var FP = (function() {
     };
 
     var _start = function() {
-        if (_isRunning) {
-            _stop();
-        }
-
         _isRunning = true;
         _timer = setInterval(_updateProgress, _timeUnit);
     };
@@ -40,18 +36,20 @@ var FP = (function() {
         clearInterval(_timer);
         _timer = null;
         _isRunning = false;
+        _onStop();
     };
 
     var _reset = function() {
         if (_isRunning) {
             _stop();
         }
+
         _percent = 0.0;
+        _speed = _config.default.speed;
+        _stopPercent = 100.0;
     };
 
-    var _onPercentChanged = function(changedPercent) {
-
-    };
+    var _onPercentChanged = function(changedPercent) {};
 
     var _init = function(options) {
         if (options.onPercentChanged !== undefined && options.onPercentCahnged !== null) {
@@ -62,6 +60,8 @@ var FP = (function() {
             }
         }
     };
+
+    var _onStop = function() {};
 
     var _stopAt = function(stopPercent, withInMs) {
         if (stopPercent <= _percent) {
@@ -77,15 +77,14 @@ var FP = (function() {
         }
 
         var leftPercent = stopPercent - _percent;
-        _speed = leftPercent / withInMs;
+        _speed = parseFloat((leftPercent / withInMs * _timeUnit).toFixed(2));
         _stopPercent = stopPercent;
         _start();
     };
 
     return {
         init: _init,
-        start: _start,
-        stop: _stop,
+        reset: _reset,
         stopAt: _stopAt
     };
 })();
