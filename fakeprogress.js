@@ -63,7 +63,7 @@ var FP = (function() {
 
     var _onStop = function() {};
 
-    var _stopAt = function(stopPercent, withInMs) {
+    var _stopAt = function(stopPercent, withInMs, onStop) {
         if (stopPercent <= _percent) {
             throw "stopPercent should be greater than current percent";
         }
@@ -72,8 +72,22 @@ var FP = (function() {
             throw "withInMs should be greater than 0";
         }
 
+        var resetOnStop = false;
+
+        if (onStop !== undefined && onStop !== null) {
+            if (typeof onStop == "function") {
+                resetOnStop = true;
+            } else {
+                throw "onStop is not a function";
+            }
+        }
+
         if (_isRunning) {
             _stop();
+        }
+
+        if (resetOnStop) {
+            _onStop = onStop;
         }
 
         var leftPercent = stopPercent - _percent;

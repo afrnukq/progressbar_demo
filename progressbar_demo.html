@@ -35,7 +35,9 @@
                 }
             });
 
-            FP.stopAt(80, 2000);
+            FP.stopAt(80, 2000, function() {
+                FP.stopAt(100, 5000);
+            });
         };
     </script>
 </head>
