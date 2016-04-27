@@ -72,23 +72,19 @@ var FP = (function() {
             throw "withInMs should be greater than 0";
         }
 
-        var resetOnStop = false;
-
         if (onStop !== undefined && onStop !== null) {
-            if (typeof onStop == "function") {
-                resetOnStop = true;
-            } else {
+            if (typeof onStop != "function") {
                 throw "onStop is not a function";
             }
+        } else {
+            onStop = function() {};
         }
 
         if (_isRunning) {
             _stop();
         }
 
-        if (resetOnStop) {
-            _onStop = onStop;
-        }
+        _onStop = onStop;
 
         var leftPercent = stopPercent - _percent;
         _speed = parseFloat((leftPercent / withInMs * _timeUnit).toFixed(2));
