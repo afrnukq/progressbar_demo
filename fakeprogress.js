@@ -32,11 +32,14 @@ var FP = (function() {
         _timer = setInterval(_updateProgress, _timeUnit);
     };
 
-    var _stop = function() {
+    var _stop = function(silent) {
         clearInterval(_timer);
         _timer = null;
         _isRunning = false;
-        _onStop();
+
+        if (!silent) {
+            _onStop();
+        }
     };
 
     var _reset = function() {
@@ -63,12 +66,12 @@ var FP = (function() {
 
     var _onStop = function() {};
 
-    var _stopAt = function(stopPercent, withInMs, onStop) {
+    var _goTo = function(stopPercent, withinMs, onStop) {
         if (stopPercent <= _percent) {
             throw "stopPercent should be greater than current percent";
         }
 
-        if (withInMs <= 0) {
+        if (withinMs <= 0) {
             throw "withInMs should be greater than 0";
         }
 
@@ -81,13 +84,13 @@ var FP = (function() {
         }
 
         if (_isRunning) {
-            _stop();
+            _stop(true);
         }
 
         _onStop = onStop;
 
         var leftPercent = stopPercent - _percent;
-        _speed = parseFloat((leftPercent / withInMs * _timeUnit).toFixed(2));
+        _speed = parseFloat((leftPercent / withinMs * _timeUnit).toFixed(2));
         _stopPercent = stopPercent;
         _start();
     };
@@ -95,6 +98,6 @@ var FP = (function() {
     return {
         init: _init,
         reset: _reset,
-        stopAt: _stopAt
+        goTo: _goTo
     };
 })();
