@@ -15,7 +15,7 @@
         #prog {
             width: 0%;
             height: 20px;
-            background-color: yellow;
+            background-color: blue;
         }
         
         #percent {
@@ -34,24 +34,34 @@
                 }
             });
 
-            FP.goTo(95, 5000, function() {
-                alert("timeout!");
-            });
-
             document.getElementById("btnDone").onclick = function() {
                 FP.goTo(100, 300, function() {
-                    alert("done!");
+                    alert("done by click");
                 });
             };
+
+            document.getElementById("btnReset").onclick = function() {
+                FP.reset(function() {
+                    document.getElementById("percent").innerText = "0%";
+                    document.getElementById("prog").style.width = "0%";
+                });
+            };
+
+            FP.goTo(10, 1000, function() {
+                FP.goToGdly(100, 5000, function() {
+                    alert("done auto");
+                });
+            });
         };
     </script>
 </head>
 
 <body onload="onload">
     <div id="cntr">
-        <div id="prog"><span id="percent"></span></div>
+        <div id="prog"></div><span id="percent">0%</span>
     </div>
     <input type="button" value="done" id="btnDone" />
+    <input type="button" value="reset" id="btnReset" />
 </body>
 
 </html>
