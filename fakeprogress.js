@@ -112,22 +112,20 @@ var FP = (function() {
         }
 
         var leftPercent = stopPercent - _percent;
-        var gdlyLevel = parseInt(leftPercent / 15);
-        var temp = (gdlyLevel * (gdlyLevel - 1) / 2);
-        var a1 = leftPercent % temp;
-        var d = parseInt((leftPercent - a1) / temp);
-        var avgMs = parseInt(withinMs / gdlyLevel);
+        var d = 10;
+        var gdlyLevel = Math.round((1 + Math.sqrt(1 + 8 * leftPercent / d)) / 2);
+        var avgMs = Math.round(withinMs / gdlyLevel);
 
-        _recurGoTo(_percent + a1 + d, a1, d, 1, avgMs, onStop);
+        _recurGoTo(_percent + d, d, 1, avgMs, onStop);
     };
 
-    var _recurGoTo = function(stopPercent, a1, d, n, withinMs, onStop) {
+    var _recurGoTo = function(stopPercent, d, n, withinMs, onStop) {
         if (stopPercent >= 100.0) {
-            var leftMs = parseInt(withinMs * (100.0 - _percent) / (stopPercent - _percent));
+            var leftMs = Math.round(withinMs * (100.0 - _percent) / (stopPercent - _percent));
             _goTo(100, leftMs, onStop);
         } else {
             _goTo(stopPercent, withinMs, function() {
-                _recurGoTo(stopPercent + a1 + (n + 1) * d, a1, d, n + 1, withinMs, onStop);
+                _recurGoTo(stopPercent + (n + 1) * d, d, n + 1, withinMs, onStop);
             });
         }
     };
